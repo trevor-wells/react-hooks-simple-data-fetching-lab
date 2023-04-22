@@ -1,16 +1,20 @@
-import React, {useEffect, useState} from "react"
+import React, { useState, useEffect } from "react";
 
-export default function App(){
+function App() {
+  const [dogPic, setDogPic] = useState(null);
 
-    const [image, setImage] = useState(null)
+  useEffect(() => {
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then((response) => response.json())
+      .then((data) => {
+        setDogPic(data.message);
+      });
+  }, []);
+  // use an empty dependencies array, so we only run the fetch request ONCE
 
-    useEffect(() => {
-        fetch("http://dog.ceo/api/breeds/image/random")
-        .then(response => response.json())
-        .then(data => setImage(data.message))
-    }, [])
+  if (!dogPic) return <p>Loading...</p>;
 
-    return(
-        image ? <img src={image} alt="A Random Dog"/> : <p>Loading...</p>
-    )
+  return <img src={dogPic} alt="A Random Dog" />;
 }
+
+export default App;
